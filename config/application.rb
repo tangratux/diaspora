@@ -10,7 +10,7 @@ require 'active_resource/railtie'
 # If you have a Gemfile, require the gems listed there, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(:default, Rails.env) if defined?(Bundler)
-
+require 'rack/fiber_pool'
 require File.expand_path('../../lib/mongo_mapper/bson_id', __FILE__)
 module Diaspora
   class Application < Rails::Application
@@ -21,6 +21,7 @@ module Diaspora
     # Add additional load paths for your own custom dirs
      #config.autoload_paths += %W(#{config.root}/lib)
      config.autoload_paths += %W(#{config.root}/lib)
+     config.middleware.insert_before ActionDispatch::Static, Rack::FiberPool
 
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named

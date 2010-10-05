@@ -20,6 +20,7 @@ gem 'roxml', :git => 'git://github.com/Empact/roxml.git'
 gem 'addressable', :require => 'addressable/uri'
 gem 'json'
 gem 'mini_fb'
+gem 'rack-fiber_pool'
 
 #Standards
 gem 'pubsubhubbub'

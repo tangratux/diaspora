@@ -21,6 +21,15 @@ class DevUtilitiesController < ApplicationController
       end
     end
   end
+  
+  def test_webfinger
+    a = params[:webfinger_handle].strip
+    
+    p = Person.from_webfinger(a)
+    
+    puts p.inspect
+    render :nothing => true
+  end
 
   def zombiefriendaccept
     render :nothing => true

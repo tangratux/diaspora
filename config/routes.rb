@@ -45,6 +45,8 @@ Diaspora::Application.routes.draw do
 
   match '.well-known/host-meta',:to => 'publics#host_meta'
   match 'receive/users/:id',     :to => 'publics#receive'
+  
+  match 'finger', :to => "dev_utilities#test_webfinger"
   match 'log', :to => "dev_utilities#log"
 
   #root
