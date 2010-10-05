@@ -100,11 +100,7 @@ class Person
   
   
   def self.build_from_webfinger(profile)
-    puts profile.inspect
-    puts "foobar"
     return nil if profile.nil? || !profile.valid_diaspora_profile?
-    
-    raise "please send in a Webfinger Object" if profile.class != Webfinger
     new_person = Person.new
     new_person.exported_key = profile.public_key
     new_person.id = profile.guid
@@ -114,7 +110,6 @@ class Person
     hcard = HCard.find profile.hcard
     new_person.profile = Profile.new(:first_name => hcard[:given_name], :last_name => hcard[:family_name])
     
-    puts new_person.inspect
     puts new_person.valid?
     new_person.save! ? new_person : nil
   end

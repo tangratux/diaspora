@@ -28,7 +28,7 @@ class DevUtilitiesController < ApplicationController
     p = Person.from_webfinger(a)
     
     puts p.inspect
-    render :nothing => true
+    render :text => "bonerific"
   end
 
   def zombiefriendaccept

@@ -20,7 +20,7 @@ class PublicsController < ApplicationController
   end
 
   def webfinger
-    @person = Person.by_webfinger(params[:q], :local => true) if params[:q]
+    @person = Person.local_by_account_identifier if params[:q]
     unless @person.nil? || @person.owner.nil?
       render 'webfinger', :content_type => 'application/xrd+xml'
     else
