@@ -66,6 +66,9 @@ $(document).ready(function(){
       $(".reshare_box").hide();
     };
   });
+  
+  $("#slider").easySlider({speed:400, numeric:true});
+  
 
 });//end document ready
 
@@ -120,4 +123,12 @@ $(".make_profile_photo").live("click", function(){
       });
     }
   });
+});
+
+$(".getting_started_box").live("click",function(evt){
+  $(this).animate({
+    left: parseInt($(this).css('left'),30) == 0 ?
+        -$(this).outerWidth() :
+        0
+    },function(evt){ $(this).css('left', '1000px')});
 });
