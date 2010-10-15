@@ -113,7 +113,7 @@ HEADER
       if @author
         @author
       else
-        @author ||= Person.by_webfinger @author_email
+        @author ||= Person.by_account_identifier @author_email
       end
     end
 
