@@ -32,20 +32,24 @@ class RequestsController < ApplicationController
   end
 
   def create
-    respond = [301, {'Content-Type' => 'text/plain', 'Location' => aspects_manage_path}, "bonecity"]
     aspect = current_user.aspect_by_id(params[:request][:aspect_id])
     account = params[:request][:destination_url].strip  
     finger = EMWebfinger.new(account)
     
     
     finger.on_person{ |person|
-      puts person.inspect
+      
+      if person.class == "String"
+        env.['async.callback'].call [301, {'Content-Type' => 'text/plain', 'Location' => aspects_manage_path}, "bad!"]
+      end
+
       rel_hash = {:friend => person}
 
       Rails.logger.debug("Sending request: #{rel_hash}")
 
       begin
         @request = current_user.send_friend_request_to(rel_hash[:friend], aspect)
+        respond = [301, {'Content-Type' => 'text/plain', 'Location' => aspects_manage_path}, respond_with @request]
       rescue Exception => e
         raise e unless e.message.include? "already"
         flash[:notice] = I18n.t 'requests.create.already_friends', :destination_url => params[:request][:destination_url]
