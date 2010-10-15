@@ -17,4 +17,8 @@ module HCard
   def self.find url
     self.parse self.fetch(url)
   end
+
+  def self.build(raw_hcard)
+    self.parse Nokogiri::HTML(raw_hcard)
+  end
 end

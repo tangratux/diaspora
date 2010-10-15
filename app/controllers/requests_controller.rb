@@ -2,6 +2,8 @@
 #   licensed under the Affero General Public License version 3 or later.  See
 #   the COPYRIGHT file.
 
+require File.join(Rails.root, 'lib/em-webfinger')
+
 class RequestsController < ApplicationController
   before_filter :authenticate_user!
   include RequestsHelper
@@ -30,36 +32,41 @@ class RequestsController < ApplicationController
   end
 
   def create
+    respond = [301, {'Content-Type' => 'text/plain', 'Location' => aspects_manage_path}, "bonecity"]
     aspect = current_user.aspect_by_id(params[:request][:aspect_id])
+    account = params[:request][:destination_url].strip  
+    finger = EMWebfinger.new(account)
+    
+    
+    finger.on_person{ |person|
+      puts person.inspect
+      rel_hash = {:friend => person}
 
-    begin
-      rel_hash = relationship_flow(params[:request][:destination_url].strip)
-    rescue Exception => e
-      raise e unless e.message.include? "not found"
-      flash[:error] = I18n.t 'requests.create.error'
-      respond_with :location => aspect
-      return
-    end
+      Rails.logger.debug("Sending request: #{rel_hash}")
 
-    # rel_hash = {:friend => params[:friend_handle]}
-    Rails.logger.debug("Sending request: #{rel_hash}")
+      begin
+        @request = current_user.send_friend_request_to(rel_hash[:friend], aspect)
+      rescue Exception => e
+        raise e unless e.message.include? "already"
+        flash[:notice] = I18n.t 'requests.create.already_friends', :destination_url => params[:request][:destination_url]
+        env["async.callback"].call respond
+        return
+      end
 
-    begin
-      @request = current_user.send_friend_request_to(rel_hash[:friend], aspect)
-    rescue Exception => e
-      raise e unless e.message.include? "already"
-      flash[:notice] = I18n.t 'requests.create.already_friends', :destination_url => params[:request][:destination_url]
-      respond_with :location => aspect
-      return
-    end
+      if @request
+        flash[:notice] =  I18n.t 'requests.create.success',:destination_url => @request.destination_url
+        env["async.callback"].call respond
+      else
+        flash[:error] = I18n.t 'requests.create.horribly_wrong'
+        env["async.callback"].call respond
+      end
 
-    if @request
-      flash[:notice] =  I18n.t 'requests.create.success',:destination_url => @request.destination_url
-      respond_with :location => aspect
-    else
-      flash[:error] = I18n.t 'requests.create.horribly_wrong'
-      respond_with :location => aspect
-    end
+     env["async.callback"].call respond
+    }
+    
+    finger.fetch
+
+    throw :async
   end
 
 end
