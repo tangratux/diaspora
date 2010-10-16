@@ -49,10 +49,13 @@ module ApplicationHelper
   end
 
   def person_image_tag(person)
+    image_tag image_or_default(person), :class => "avatar", :alt => person.real_name, :title => person.real_name
+  end
+
+  def image_or_default(person)
     image_location = person.profile.image_url
     image_location ||= "/images/user/default.jpg"
-
-    image_tag image_location, :class => "avatar", :alt => person.real_name, :title => person.real_name
+    image_location
   end
 
   def person_image_link(person)
