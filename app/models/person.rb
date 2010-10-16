@@ -93,6 +93,7 @@ class Person
    (person.nil? || person.remote?) ? nil : person
   end
 
+
   def self.build_from_webfinger(profile, hcard)
     return nil if profile.nil? || !profile.valid_diaspora_profile?
     new_person = Person.new
@@ -111,7 +112,7 @@ class Person
   end
 
   def remote?
-    owner.nil?
+    owner_id.nil?
   end
 
   def as_json(opts={})

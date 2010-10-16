@@ -116,7 +116,7 @@ describe Person do
     end
   end
 
-  describe '::search' do
+  describe '#search' do
     before do
       @friend_one   = Factory.create(:person)
       @friend_two   = Factory.create(:person)
@@ -164,17 +164,43 @@ describe Person do
       people = Person.search("Casey Grippi")
       people.should == [@friend_four]
     end
+  end
 
-    it 'should search by diaspora_handle exactly' do
-      stub_success("tom@tom.joindiaspora.com")
-      Person.by_webfinger(@friend_one.diaspora_handle).should == @friend_one
+  context 'webfingering people' do
+    let(:user) {Factory(:user)}
+    let(:person) {Factory(:person)}
+
+    describe '#by_account_identifier' do
+      it 'should find a local users person' do
+        p = Person.by_account_identifier(user.diaspora_handle)
+        p.should == user.person
+      end
+
+      it 'should find remote users person' do
+        p = Person.by_account_identifier(person.diaspora_handle)
+        p.should == person
+      end
     end
+
+    describe '#local_by_account_identifier' do
+      it 'should find local users people' do
+        p = Person.local_by_account_identifier(user.diaspora_handle)
+        p.should == user.person
+      end
+
+      it 'should not find a remote person' do
+        p = Person.local_by_account_identifier(@person.diaspora_handle)
+        p.should be nil
+
+      end
+    end
+
 
     it 'should create a stub for a remote user' do
       stub_success("tom@tom.joindiaspora.com")
+       
       tom = Person.by_webfinger('tom@tom.joindiaspora.com')
       tom.real_name.include?("Hamiltom").should be true
     end
-
   end
 end
