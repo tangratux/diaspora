@@ -39,6 +39,7 @@ class RequestsController < ApplicationController
       finger = EMWebfinger.new(account)
 
       finger.on_person{ |person|
+
         rel_hash = {:friend => person}
 
         Rails.logger.debug("Sending request: #{rel_hash}")
