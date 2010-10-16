@@ -47,16 +47,10 @@ class RequestsController < ApplicationController
           @request = current_user.send_friend_request_to(rel_hash[:friend], aspect)
           
         rescue Exception => e
-          raise e unless e.message.include? "already"
-          flash[:notice] = I18n.t 'requests.create.already_friends', :destination_url => params[:request][:destination_url]
+          Rails.logger.debug("error: #{e.message}")
+          #raise e unless e.message.include? "already"
+          #flash[:notice] = I18n.t 'requests.create.already_friends', :destination_url => params[:request][:destination_url]
         end
-
-        if @request
-          flash[:notice] =  I18n.t 'requests.create.success',:destination_url => @request.destination_url
-        else
-          flash[:error] = I18n.t 'requests.create.horribly_wrong'
-        end
-      end
     }
     
     finger.fetch
