@@ -52,7 +52,7 @@ module ApplicationHelper
     image_tag image_or_default(person), :class => "avatar", :alt => person.real_name, :title => person.real_name
   end
 
-  def image_or_default(person)
+    def image_or_default(person)
     image_location = person.profile.image_url
     image_location ||= "/images/user/default.jpg"
     image_location

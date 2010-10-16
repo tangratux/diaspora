@@ -38,14 +38,20 @@ class EMWebfinger
   end
 
   def make_person_from_webfinger(webfinger_profile)
-    wf_profile = WebfingerProfile.new(@account, webfinger_profile)
-    http = EventMachine::HttpRequest.new(wf_profile.hcard).get :timeout => TIMEOUT
-    http.callback{
-      hcard = HCard.build http.response
-      p = Person.build_from_webfinger(wf_profile, hcard)
-      process_callbacks(p)
-    }
-    http.errback{ process_callbacks "there was a problem fetching the hcard for #{@account}"}
+    unless webfinger_profile.strip == ""
+    
+      wf_profile = WebfingerProfile.new(@account, webfinger_profile)
+      puts wf_profile.inspect
+      puts wf_profile.hcard
+      
+      http = EventMachine::HttpRequest.new(wf_profile.hcard).get :timeout => TIMEOUT
+      http.callback{
+        hcard = HCard.build http.response
+        p = Person.build_from_webfinger(wf_profile, hcard)
+        process_callbacks(p)
+      }
+      http.errback{ process_callbacks "there was a problem fetching the hcard for #{@account}"}
+    end
   end
 
 

@@ -11,21 +11,27 @@ class DevUtilitiesController < ApplicationController
     render :nothing => true
     bkr_info  = backer_info
     if current_user.email == "tom@tom.joindiaspora.com"
+      puts bkr_info.inspect
       bkr_info.each do |backer|
         backer_email = "#{backer['username']}@#{backer['username']}.joindiaspora.com"
-
+       
         webfinger = EMWebfinger.new(backer_email)
-
-        webfinger.on_person{ |person|
-
-          rel_hash = {:friend => person }
-          logger.info "Zombiefriending #{backer['given_name']} #{backer['family_name']}"
-          logger.info "Calling send_friend_request with #{rel_hash[:friend]} and #{current_user.aspects.first}"
-          current_user.send_friend_request_to(rel_hash[:friend], current_user.aspects.first)
-
+        
+        webfinger.on_person { |person|
+          puts person.inspect
+          if person.respond_to? :diaspora_handle
+            rel_hash = {:friend => person}
+            logger.info "Zombiefriending #{backer['given_name']} #{backer['family_name']}"
+            logger.info "Calling send_friend_request with #{rel_hash[:friend]} and #{current_user.aspects.first}"
+            current_user.send_friend_request_to(rel_hash[:friend], current_user.aspects.first)
+            env["async.callback"].call [200, {'Content-Type' => 'text/plain'}, ['Good news, everyone!']]
+          else
+            puts "error: #{person}"
+          end
           }
         webfinger.fetch
       end
+      throw :async
     end
   end
 
