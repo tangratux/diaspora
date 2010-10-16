@@ -14,7 +14,12 @@ require 'webmock/rspec'
 include Devise::TestHelpers
 include WebMock::API
 
-# Requires supporting files with custom matchers and macros, etc,
+def key_from_fixture
+  @keys = JSON.parse File.open(File.dirname(__FILE__) + '/fixtures/keys.json').read
+  OpenSSL::PKey::RSA.new(@keys.first)
+end
+
+  # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
@@ -26,9 +31,9 @@ RSpec.configure do |config|
   DatabaseCleaner.orm = "mongo_mapper"
 
   config.before(:suite) do
+  OpenSSL::PKey::RSA.stub!(:generate).and_return(key_from_fixture)
     DatabaseCleaner.clean_with(:truncation)
     stub_signature_verification
-
   end
 
   config.before(:each) do
@@ -88,6 +93,8 @@ ImageUploader.enable_processing = false
     user2.reload
     aspect2.reload
   end
+
+
 
   def stub_success(address = 'abc@example.com')
     host = address.split('@')[1]
