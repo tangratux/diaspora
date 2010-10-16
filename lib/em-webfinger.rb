@@ -3,7 +3,6 @@ require File.join(Rails.root, 'lib/webfinger_profile')
 
 class EMWebfinger
   TIMEOUT = 5
-  
   def initialize(account)
     @account = account
     @callbacks = []
@@ -79,4 +78,3 @@ class EMWebfinger
   end
 
 end
-
