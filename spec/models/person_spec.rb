@@ -166,7 +166,7 @@ describe Person do
     end
   end
 
-  context 'webfingering people' do
+  context 'people finders for webfinger' do
     let(:user) {Factory(:user)}
     let(:person) {Factory(:person)}
 
@@ -191,16 +191,7 @@ describe Person do
       it 'should not find a remote person' do
         p = Person.local_by_account_identifier(@person.diaspora_handle)
         p.should be nil
-
       end
-    end
-
-
-    it 'should create a stub for a remote user' do
-      stub_success("tom@tom.joindiaspora.com")
-       
-      tom = Person.by_webfinger('tom@tom.joindiaspora.com')
-      tom.real_name.include?("Hamiltom").should be true
     end
   end
 end
