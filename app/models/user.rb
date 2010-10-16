@@ -337,6 +337,22 @@ class User
     end
   end
 
+  ###Events#############
+
+  def rsvp_for( opts = {} )
+    raise "Cannot RSVP to an event you don't know about" unless raw_visible_posts.include?(opts[:event])
+    raise "Must include attending status" unless opts[:attending]
+    rsvp = Rsvp.new(:person => self.person, :status => opts[:attending])
+    opts[:event].rsvps << rsvp
+    opts[:event].save
+    send_rsvp
+    rsvp
+  end
+
+  def send_rsvp
+
+  end
+
   ###Helpers############
   def self.instantiate!( opts = {} )
     opts[:person][:diaspora_handle] = "#{opts[:username]}@#{APP_CONFIG[:terse_pod_url]}"
