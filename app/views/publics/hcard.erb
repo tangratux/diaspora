@@ -10,13 +10,13 @@
         </dd>
       </dl>
         <dl class="entity_given_name">
-        <dt>Full name</dt>
+        <dt>First name</dt>
         <dd>
         <span class="given_name" ><%= @person.profile.first_name %></span>
         </dd>
         </dl>
         <dl class="entity_family_name">
-        <dt>Full name</dt>
+        <dt>Family name</dt>
         <dd>
         <span class="family_name" ><%= @person.profile.last_name %></span>
         </dd>
@@ -36,7 +36,7 @@
       <dl class="entity_photo">
         <dt>Photo</dt>
         <dd>
-        <img class="photo avatar" src="<%= @person.profile.image_url%>" width="100" height="100"/>
+        <img class="photo avatar" src="<%= image_or_default(@person)%>" width="100" height="100"/>
         </dd>
       </dl>
       <dl class="entity_note">
