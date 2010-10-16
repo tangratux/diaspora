@@ -1,3 +1,5 @@
+require File.join(Rails.root, 'lib/em-webfinger')
+
 module Diaspora
   module UserModules
     module Receiving
