@@ -102,7 +102,7 @@ class Person
     new_person.url = profile.seed_location
 
     #hcard_profile = HCard.find profile.hcard.first[:href]
-
+    Rails.logger.info("hcard: #{puts hcard.inspect}")
     new_person.url = hcard[:url]
     new_person.profile = Profile.new(:first_name => hcard[:given_name], :last_name => hcard[:family_name], :image_url => hcard[:photo])
 
