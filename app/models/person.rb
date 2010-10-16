@@ -120,7 +120,7 @@ class Person
       :person => {
         :id           => self.id,
         :name         => self.real_name,
-        :diaspora_handle        => self.diaspora_handle,
+        :diaspora_handle => self.diaspora_handle,
         :url          => self.url,
         :exported_key => exported_key
       }

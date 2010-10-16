@@ -42,8 +42,6 @@ class EMWebfinger
     unless webfinger_profile.strip == ""
     
       wf_profile = WebfingerProfile.new(@account, webfinger_profile)
-      puts wf_profile.inspect
-      puts wf_profile.hcard
       
       http = EventMachine::HttpRequest.new(wf_profile.hcard).get :timeout => TIMEOUT
       http.callback{
