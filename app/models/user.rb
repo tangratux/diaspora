@@ -345,11 +345,13 @@ class User
     rsvp = Rsvp.new(:person => self.person, :status => opts[:attending])
     opts[:event].rsvps << rsvp
     opts[:event].save
-    send_rsvp
+    rsvp.save
+    send_rsvp rsvp 
     rsvp
   end
 
-  def send_rsvp
+  def send_rsvp rsvp
+    push_to_people(rsvp, [rsvp.event.person])
 
   end
 
