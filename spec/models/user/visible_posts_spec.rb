@@ -20,7 +20,6 @@ describe User do
   let!(:status_message5)  { user3.post :status_message, :message => "heyyyy", :to => user3.aspects.first.id}
   let!(:status_message6)  { user4.post :status_message, :message => "yooo", :to => user4.aspects.first.id}
 
-
   before do
     friend_users(user, first_aspect, user2, user2.aspects.first)
   end
@@ -58,6 +57,9 @@ describe User do
       user.visible_posts(:by_members_of => first_aspect).should =~ [status_message4]
       user.visible_posts(:by_members_of => second_aspect).should =~ [status_message5, status_message6]
     end
+
+
+  
   end
 
   context 'querying' do
@@ -78,6 +80,8 @@ describe User do
       user.reload
     end
 
+
+    
     it 'should find all albums if passed :all' do
       user.albums_by_aspect(:all).should have(3).albums
     end
@@ -86,6 +90,21 @@ describe User do
       user.albums_by_aspect(first_aspect.reload).should have(2).albums
       user.albums_by_aspect(second_aspect.reload).should have(1).album
     end
+
+    it 'queries by type' do
+      user.visible_posts(:_type => "Album").should have(3).albums
+    end
+
+    it 'queries all aspects' do
+      user.visible_posts(:_type => "Album", :aspect => :all).should have(3).albums
+    end
+
+    it 'queries by type and aspect' do
+      user.visible_posts(:_type => "Album", :aspect => first_aspect.reload).should have(2).albums
+      user.visible_posts(:_type => "Album", :aspect => second_aspect.reload).should have(1).album
+    end
   end
+
+
 end
 

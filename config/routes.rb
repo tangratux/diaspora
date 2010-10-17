@@ -9,6 +9,7 @@ Diaspora::Application.routes.draw do
   resources :requests,        :except => [:edit, :update]
   resources :photos,          :except => [:index]
   resources :albums
+  resources :events
 
   devise_for :users, :controllers => {:registrations => "registrations",
                                       :password      => "devise/passwords",

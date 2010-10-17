@@ -16,6 +16,13 @@ module Diaspora
           return raw_visible_posts if opts[:by_members_of] == :all
           aspect = self.aspects.find_by_id( opts[:by_members_of].id )
           aspect.posts
+        elsif opts[:aspect]
+          aspect = opts.delete(:aspect)
+          if aspect == :all
+            self.raw_visible_posts.all(opts)
+          else
+            aspect.posts.all(opts)
+          end
         else
           self.raw_visible_posts.all(opts)
         end
