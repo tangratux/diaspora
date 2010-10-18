@@ -14,11 +14,9 @@ class EventsController < ApplicationController
   end
 
   def create
-    puts params.inspect
     aspect = params[:event][:to]
 
     data = clean_hash(params[:event])
-    puts data.inspect
     @event = current_user.post(:event, data)
     flash[:notice] = I18n.t 'events.create.success', :name  => @event.title
     redirect_to :action => :show, :id => @event.id, :aspect => aspect
@@ -65,11 +63,12 @@ class EventsController < ApplicationController
 
   private
   def clean_hash(params)
-    return {
-      :title => params[:title],
-      :to   => params[:to],
-      :start_time => params[:start_time],
-      :end_time => params[:end_time]
-    }
+      return {
+        :title => params[:title],
+        :summary => params[:summary],
+        :to   => params[:to],
+        :start_date => params[:start_date],
+        :start_time => params[:start_date] + "  " + params[:start_time]
+      }
   end
 end

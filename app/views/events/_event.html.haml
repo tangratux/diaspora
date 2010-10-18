@@ -2,18 +2,34 @@
 -#   licensed under the Affero General Public License version 3 or later.  See
 -#   the COPYRIGHT file.
 
-.event{:id => post.id, :class => ("mine" if current_user.owns?(post))}
-  %div.name
-    = post.title #link_to post.title, object_path(post, :aspect => @aspect)
-    = post.summary
+%li.message{:id => post.id, :class => ("mine" if current_user.owns?(post))}
 
-    %div.time
-      by
-      = link_to ((current_user.person == post.person)? t('.you') : post.person.real_name), person_path(post.person)
-      %br
-      = how_long_ago(post) #link_to(how_long_ago(post), object_path(post, :aspect => @aspect))
+  = person_image_link(post.person)
 
-/  %div.rsvp_stats
-/    - for photo in post.photos[0..3]
-/      = link_to (image_tag photo.url(:thumb_large)), album_path(post, :aspect => @aspect)
+  .content
+    .from
+      = link_to post.person.real_name, post.person
+      .aspect
+        ➔
+        %ul
+          - if post.public?
+            the world
+          - else
+            - for aspect in current_user.aspects_with_post( post.id )
+              %li= link_to aspect.name, aspect
+
+      - if current_user.owns?(post)
+        .destroy_link
+          = link_to t('.delete'), event_path(post), :confirm => t('.are_you_sure'), :method => :delete, :remote => true, :class => "delete"
+
+    = post.title
+    = post.summary if post.summary
+    = post.start_time
+    = post.end_time if post.end_time
+
+    .info
+      %span.time= link_to(how_long_ago(post), object_path(post))
+      = link_to "#{t('.show_comments')} (#{post.comments.count})", '#', :class => "show_post_comments"
+
+    = render "comments/comments", :post => post
 

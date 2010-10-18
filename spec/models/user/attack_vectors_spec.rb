@@ -69,7 +69,6 @@ describe User do
       person = user3.person
       original_url = person.url
       original_id = person.id
-      puts original_url
       
       comment.person.url = "http://bad.com/"
       user3.delete

@@ -69,6 +69,46 @@ en:
       helper:
           friends_albums: "Friends Albums"
           your_albums: "Your Albums"
+
+  events:
+      event:
+          you: "you"
+          show_comments: "show comments"
+          are_you_sure: "Are you sure?"
+          delete: "Delete"
+      new_event:
+          create: "create"
+          add_a_new_event: "Add a new event"
+      show:
+          event: "Event"
+          edit_event: "Edit Event"
+          comments: "comments"
+          events: "events"
+          updated: "updated"
+          by: "by"
+          destroy: "Destroy"
+          view_all: "View All"
+          message: "Message"
+          owner: "Owner"
+      edit:
+          editing: "Editing"
+          updated: "updated"
+          are_you_sure: "Are you sure?"
+          delete_event: "Delete Event"
+          cancel: "Cancel"
+      index:
+          home: "home"
+          new_event: "New Event"
+      create:
+          success: "You've created an event called %{name}."
+      update:
+          success: "Event %{name} successfully edited."
+          failure: "Failed to edit event %{name}."
+      destroy:
+          success: "Event %{name} deleted."
+      helper:
+          friends_events: "Friends Events"
+          your_events: "Your Events"
   aspects:
       empty_messages:
           start_talking:  "Nobody has said anything yet.  Get the conversation started!"

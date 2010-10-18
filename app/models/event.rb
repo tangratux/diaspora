@@ -11,14 +11,15 @@ class Event < Post
 
   key :title,      String
   key :summary,    String
+  key :start_date, Time
   key :start_time, Time
-  key :end_time,   Time
+  key :end_date, Time
+  key :end_time, Time
 
   
   many :rsvps, :class_name => 'Rsvp'
   
-  validates_presence_of :title, :start_time, :end_time
+  validates_presence_of :title, :start_time
 
-  timestamps!
 
 end

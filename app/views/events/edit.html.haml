@@ -1,0 +1,35 @@
+-#   Copyright (c) 2010, Diaspora Inc.  This file is
+-#   licensed under the Affero General Public License version 3 or later.  See
+-#   the COPYRIGHT file.
+
+.back= link_to "⇧ #{@event.title}", @event
+%h1.big_text
+
+  = "#{t('.editing')} #{@event.title}"
+
+.sub_header
+  ="#{t('.updated')} #{how_long_ago(@event)}"
+
+- form_for @event do |a|
+  = a.error_messages
+  %p
+    %b event title:
+    = a.text_field :title
+    %b event summary:
+    = a.text_field :summary
+    %b event date:
+    = "pending" #a.text_field :start_daae
+    %b event time
+    = "pending"
+
+  .submit_block
+    = link_to t('.cancel'), root_path
+    or
+    = a.submit
+
+.button.delete
+  = link_to t('.delete_event'), @event, :confirm => t('.are_you_sure'), :method => :delete
+
+#content_bottom
+  .back
+    = link_to "⇧ #{@event.title}", @event

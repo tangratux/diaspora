@@ -55,7 +55,6 @@ describe Rsvp do
     end
 
     it 'has an person handle' do
-      puts doc.to_xml
       doc.at_xpath('./person_handle').text.should == rsvp.person.diaspora_handle
     end
   end

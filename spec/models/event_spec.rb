@@ -27,11 +27,6 @@ describe Event do
     event.should_not be_valid
   end
 
-  it 'validates presence of a end time' do
-    event.end_time = nil
-    event.should_not be_valid
-  end
-  
   it 'has many rsvps' do
     pending "how to do association checking with mongomapper, it gives a warning instead of failing"
     event.associations[:rsvp].type == :many
@@ -44,7 +39,6 @@ describe Event do
   describe '#to_xml' do
     let(:doc) { event.to_xml }
     it 'has a title' do
-      puts doc.to_s
       doc.at_xpath('./title').text.should == event.title
     end
 
