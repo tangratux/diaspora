@@ -35,13 +35,12 @@ class RequestsController < ApplicationController
     aspect = current_user.aspect_by_id(params[:request][:aspect_id])
     account = params[:request][:destination_url].strip  
     
-    EM::next_tick { 
+    #EM::next_tick { 
       finger = EMWebfinger.new(account)
+      
 
-      finger.on_person{ |person|
-
+      do_request = Proc.new{ |person|
         rel_hash = {:friend => person}
-
         Rails.logger.debug("Sending request: #{rel_hash}")
 
         begin
@@ -53,11 +52,20 @@ class RequestsController < ApplicationController
           #flash[:notice] = I18n.t 'requests.create.already_friends', :destination_url => params[:request][:destination_url]
         end
     }
-    
-    finger.fetch
-  }
-  flash[:notice] = "we tried our best to send a message to #{account}"
-  redirect_to aspects_manage_path
+
+    p = Person.by_account_identifier(account)
+    if p 
+      do_request.call(person)
+      flash[:notice] = "we sent a request to #{person.real_name}"
+    else
+      finger = EMWebfinger.new(account)
+      finger.on_person do_request
+      finger.fetch
+      flash[:notice] = "we tried our best to send a message to #{account}"
+    end
+
+    redirect_to aspects_manage_path
+
   end
 
 end

@@ -25,9 +25,7 @@ class EMWebfinger
 
   def xrd
     http = EventMachine::HttpRequest.new(xrd_url).get :timeout => TIMEOUT
-    
     http.callback { get_webfinger_profile(webfinger_profile_url(http.response)) }
-
     http.errback { process_callbacks "there was an error getting the xrd at #{xrd_url}" }
   end
 
