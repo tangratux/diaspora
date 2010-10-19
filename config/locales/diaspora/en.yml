@@ -6,6 +6,15 @@
 # See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  activemodel:
+      errors:
+          models:
+              user:
+                  attributes:
+                      username:
+                          taken: "is already taken"
+                      email:
+                          taken: "is already taken"
   hello: "Hello world"
   application:
       helper:
@@ -203,6 +212,7 @@ en:
           sent: 'Your invitation has been sent.'
           no_more: 'You have no more invitations.'
           already_sent: 'You already invited this person.'
+          already_friends: 'You are already friends with this person' 
           invitation_token_invalid: 'The invitation token provided is not valid!'
           updated: 'Your password was set successfully. You are now signed in.'
 
@@ -256,6 +266,7 @@ en:
           ignore: "Ignored friend request."
       create:
           error: "No diaspora seed found with this email!"
+          yourself: "You cannot befriend yourself!"
           already_friends: "You are already friends with %{destination_url}!"
           success: "A friend request was sent to %{destination_url}."
           horribly_wrong: "Something went horribly wrong."

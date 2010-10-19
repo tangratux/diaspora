@@ -104,18 +104,13 @@ header
   :margin -2em
     :bottom 2em
   :color #000
-  :background -webkit-gradient(linear, 0% 0%, 0% 100%, from(#666), to(#222))
-  :background -moz-linear-gradient(19% 75% 90deg, #222, #666)
   :background
-    :color #666
+    :color #333
   :padding 0
     :top 5px
-  :border
-    :bottom 1px solid #ccc
 
   a
     :color #CCC
-    :text-shadow 0 1px 0 #444
 
     &:hover
       :background none
@@ -130,6 +125,9 @@ header
     :color #fff
 
   ul#user_menu
+    a
+      :text-shadow 0 1px 0 #000
+
     :z-index 10
     :font
       :size 14px
@@ -180,34 +178,7 @@ header
 
   #global_search
     :margin
-      :left 400px
-
-  #aspect_header
-    :-webkit-box-shadow 0px -4px 6px -2px #777
-    
-    :background -webkit-gradient(linear, 0% 0%, 0% 100%, from(#F7F7F7), to(#EEEEEE))
-    :background -moz-linear-gradient(19% 75% 90deg, #eee, #f7f7f7)
-
-    :background
-      :color #eee
-    :border
-      :top 1px solid #fff
-    :padding 20px 0
-
-    h1
-      :text-shadow 0 1px 0 #fff
-
-    a
-      :color #444
-      &:hover
-        :background none
-        :color #999
-
-    .page_title
-      :text
-        :transform uppercase
-        :shadow 0 1px 0 #fff
-
+      :left 425px
 
 ul#stream
   :margin 0
@@ -230,6 +201,9 @@ ul#stream
   .right
     :top 0
 
+  .avatar
+    :border-radius 5px
+
 li.message
   :position relative
   :line-height 19px
@@ -246,7 +220,6 @@ li.message
     :background #eee
 
   .content
-    :max-width 610px
     :margin
       :top -4px
     :padding
@@ -448,16 +421,13 @@ ul.comment_set
     :top 1em
   :padding 0
   :list-style none
-  :max-width 610px
+  :background
+    :color rgba(10,81,109,0.05)
 
   textarea
     :width 100%
 
   li.comment
-    :margin
-      :bottom 0.5em
-    :background
-      :color rgba(10,81,109,0.05)
     :padding 0.6em
     :border
       :bottom 1px solid #ddd
@@ -466,8 +436,10 @@ ul.comment_set
       :color #777
       :margin
         :top -2px
+        :bottom -2px
       :padding
         :left 45px
+        :right 20px
       .from
         a
           :color #444
@@ -475,7 +447,7 @@ ul.comment_set
         :size 12px
 
       :line
-        :height 18px
+        :height 16px
 
       div.time
         :color #bbb
@@ -614,11 +586,23 @@ label
 #publisher
   :color #999
   :position relative
+  :min-height 65px
+  :max-height 90px
+  :width 100%
+  :margin
+    :bottom 10px
+    :top 0px
+
+  :border
+    :bottom 2px #777 solid
 
   .avatar
     :float left
     :margin
       :right 15px
+    :border-radius 5px
+    :-webkit-border-radius 5px
+    :-moz-border-radius 5px
 
   p
     :position absolute
@@ -627,32 +611,34 @@ label
 
   form
     :display inline
-
-    input[type='submit']
-      :display block
-      :margin
-        :right 20px
-      :width 100%
+    :position relative
 
   textarea
-    :width 570px
+    :width 515px
     :height 42px
-    :margin
-      :top 0
-      :bottom 0
+    :margin 0
 
-  .buttons
-    :float right
+  .options_and_submit
+    :display none
+    :padding
+      :top 63px
+      :bottom 5px
+    input[type='submit']
+      :float right
+      :margin
+        :top -4px
+      :width 75px
 
-  .public_toggle
-    :position absolute
-    :top 53px
-    :left 460px
-    :width 300px
-    :font
-      :size smaller
-      :style italic
-
+    .public_toggle
+      :position absolute
+      :bottom 8px
+      :width 300px
+      :font
+        :size smaller
+        :style italic
+      :display inline
+      :margin
+        :left 62px
 
 #image_picker
   .small_photo
@@ -779,7 +765,7 @@ h1.big_text
 #aspect_nav
   :color #000
   :margin
-    :top 8px
+    :top 0
     :bottom 1px
 
   :font
@@ -800,31 +786,26 @@ h1.big_text
     > li
       :padding 0
       :display inline
-      :margin
-        :right 2px
+      :margin 0
 
       a
+        :-webkit-border-radius 5px 5px 0 0 
+        :-moz-border-radius 5px 5px 0 0 
+
         :text-shadow 0 1px 0 #444
         :line
           :height 22px
 
-        :padding 3px 8px
-          :bottom 3px
+        :padding 3px 10px
         :color #CCC
 
         &:hover
           :background
-            :color #4e4e4e
+            :color #000
           :color #eee
 
       &.selected a
-        :-webkit-border-radius 5px 5px 0 0 
-        :-moz-border-radius 5px 5px 0 0 
-
-        :-webkit-box-shadow 0px -4px 6px -2px #777
-        :-moz-box-shadow 0px -4px 6px -2px #777
-
-        :text-shadow 0 1px 0 #fff
+        :text-shadow 0 1px 0 #eee
         :padding
           :top 4px
           :bottom 5px
@@ -833,17 +814,11 @@ h1.big_text
         :font
           :weight bold
         :background
-          :color #eee
+          :color #fff
 
-        :background -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fff), to(#F7F7F7))
-        :background -moz-linear-gradient(19% 75% 90deg, #f7f7f7, #fff)
-
-        :border 1px solid #fff
-          :bottom 1px solid #F7F7F7
         :color #444
         &:hover
-          :background
-            :color #efefef
+          :color #888
         a
           :color #000
   .new_requests
@@ -860,18 +835,12 @@ h1.big_text
     input
       :display inline
       :font
-        :size 12px
+        :size 13px
       :border none
 
     input[type='text']
       :width 200px
       :padding 2px
-
-    label
-      :font
-        :size 12px
-      :margin
-        :top -3px
 
 
 .aspect,
@@ -943,24 +912,33 @@ h1.big_text
     :margin 5px
     :z-index 10
 
-    :text
-      :align center
+    :width 110px
 
-    :width 125px
-    :height 120px
+    :background
+      :color #333
+
+    :border-radius 5px
+  
+    a
+      :color #ccc
 
     img
-      :height 100px
-      :width 100px
-      :display inline-block
+      :height 40px
+      :width 40px
+      :display inline
+
+    .name
+      :display inline
+      :top 0
+      :margin
+        :left 5px
 
     &:active
       :z-index 20
       :color #666
-      img
-        :-webkit-box-shadow 0 1px 3px #333
-        :-moz-box-shadow 0 2px 4px #333
-        :opacity 0.9
+      :-webkit-box-shadow 0 1px 3px #000
+      :-moz-box-shadow 0 2px 4px #000
+      :opacity 0.9
 
 ul#settings_nav
   :list
@@ -997,8 +975,8 @@ ul#settings_nav
   :line-height 1em
   img
     :margin-right -1px
-    :width 35px
-    :height 35px
+    :width 30px
+    :height 30px
 
 #thumbnails
   :line-height 14px
@@ -1025,7 +1003,6 @@ ul#settings_nav
 
 .empty_message
   :margin
-    :top 12px
     :bottom 12px
   :text
     :align center
@@ -1034,14 +1011,10 @@ ul#settings_nav
   h3
     :color #777
 
-  :margin
-    :left 70px
   :padding 2em
     :bottom 0.7em
 
-  :width 520px
-
-  :border 2px dashed #777
+  :border 2px dashed #FAC421
   :border-radius 5px
 
   .null_arrow
@@ -1057,3 +1030,9 @@ input[type="search"]
 header
   input[type="search"]
     :width 200px
+
+.fancybox_content
+  :display none
+
+.edit_photo
+  :display none

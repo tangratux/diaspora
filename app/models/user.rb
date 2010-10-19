@@ -17,47 +17,58 @@ end
 
 class User
   include MongoMapper::Document
-  plugin MongoMapper::Devise
   include Diaspora::UserModules
   include Encryptor::Private
+
+  plugin MongoMapper::Devise
+
   QUEUE = MessageHandler.new
 
   devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
-  key :username, :unique => true
-  key :serialized_private_key, String
 
-  key :invites,             Integer, :default => 5
-  key :invitation_token,    String
-  key :invitation_sent_at,  DateTime
-  key :inviter_ids,         Array
-  key :friend_ids,          Array
+  key :username
+  key :serialized_private_key, String
+  key :invites, Integer, :default => 5
+  key :invitation_token, String
+  key :invitation_sent_at, DateTime
+  key :inviter_ids, Array
+  key :friend_ids, Array
   key :pending_request_ids, Array
-  key :visible_post_ids,    Array
-  key :visible_person_ids,  Array
+  key :visible_post_ids, Array
+  key :visible_person_ids, Array
+
+  key :invite_messages, Hash
+
+  before_validation :strip_username, :on => :create
+  validates_presence_of :username
+  validates_uniqueness_of :username, :case_sensitive => false
+  validates_format_of :username, :without => /\s/
+
+  validates_with InvitedUserValidator
 
   one :person, :class_name => 'Person', :foreign_key => :owner_id
 
-  many :inviters,          :in => :inviter_ids,         :class_name => 'User'
-  many :friends,           :in => :friend_ids,          :class_name => 'Person'
-  many :visible_people,    :in => :visible_person_ids,  :class_name => 'Person' # One of these needs to go
-  many :pending_requests,  :in => :pending_request_ids, :class_name => 'Request'
-  many :raw_visible_posts, :in => :visible_post_ids,    :class_name => 'Post'
-
-  many :aspects, :class_name => 'Aspect'
+  many :inviters, :in => :inviter_ids, :class_name => 'User'
+  many :friends, :in => :friend_ids, :class_name => 'Person'
+  many :visible_people, :in => :visible_person_ids, :class_name => 'Person' # One of these needs to go
+  many :pending_requests, :in => :pending_request_ids, :class_name => 'Request'
+  many :raw_visible_posts, :in => :visible_post_ids, :class_name => 'Post'
+  many :aspects, :class_name => 'Aspect', :dependent => :destroy
 
   after_create :seed_aspects
 
-  before_validation :downcase_username, :on => :create
-  validates_with InvitedUserValidator
+  before_destroy :unfriend_everyone, :remove_person, :remove_all_aspects
 
-  before_destroy :unfriend_everyone, :remove_person
+  def strip_username
+    if username.present?
+      username.strip!
+    end
+  end
 
-   def self.find_for_authentication(conditions={})
+  def self.find_for_authentication(conditions={})
     if conditions[:username] =~ /^([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})$/i # email regex
       conditions[:email] = conditions.delete(:username)
-    else
-      conditions[:username].downcase!
     end
     super
   end
@@ -74,12 +85,12 @@ class User
   end
 
   ######### Aspects ######################
-  def aspect( opts = {} )
+  def aspect(opts = {})
     opts[:user] = self
     Aspect.create(opts)
   end
 
-  def drop_aspect( aspect )
+  def drop_aspect(aspect)
     if aspect.people.size == 0
       aspect.destroy
     else
@@ -87,7 +98,7 @@ class User
     end
   end
 
-  def move_friend( opts = {})
+  def move_friend(opts = {})
     return true if opts[:to] == opts[:from]
     friend = Person.first(:_id => opts[:friend_id])
     if self.friend_ids.include?(friend.id)
@@ -98,7 +109,7 @@ class User
         to_aspect.people << friend
         to_aspect.posts << posts_to_move
         from_aspect.person_ids.delete(friend.id.to_id)
-        posts_to_move.each{ |x| from_aspect.post_ids.delete(x.id)}
+        posts_to_move.each { |x| from_aspect.post_ids.delete(x.id) }
         from_aspect.save
         to_aspect.save
         return true
@@ -111,8 +122,8 @@ class User
   def post(class_name, options = {})
     if class_name == :photo
       raise ArgumentError.new("No album_id given") unless options[:album_id]
-      aspect_ids = aspects_with_post( options[:album_id] )
-      aspect_ids.map!{ |aspect| aspect.id }
+      aspect_ids = aspects_with_post(options[:album_id])
+      aspect_ids.map! { |aspect| aspect.id }
     else
       aspect_ids = options.delete(:to)
     end
@@ -122,6 +133,13 @@ class User
     intitial_post(class_name, aspect_ids, options)
   end
 
+  def post_to_message_fb(message, access_token)
+    id = 'me'
+    type = 'feed'
+    Rails.logger.info("Sending a message: #{message} to Facebook")
+    EventMachine::HttpRequest.new("https://graph.facebook.com/me/feed?message=#{message}&access_token=#{access_token}").post
+  end
+
   def intitial_post(class_name, aspect_ids, options = {})
     post = build_post(class_name, options)
     post.socket_to_uid(id, :aspect_ids => aspect_ids) if post.respond_to?(:socket_to_uid)
@@ -129,7 +147,7 @@ class User
     post
   end
 
-  def update_post( post, post_hash = {} )
+  def update_post(post, post_hash = {})
     if self.owns? post
       post.update_attributes(post_hash)
     end
@@ -155,7 +173,7 @@ class User
     aspect_ids
   end
 
-  def build_post( class_name, options = {})
+  def build_post(class_name, options = {})
     options[:person] = self.person
     model_class = class_name.to_s.camelize.constantize
     post = model_class.instantiate(options)
@@ -165,18 +183,18 @@ class User
     post
   end
 
-  def push_to_aspects( post, aspect_ids )
+  def push_to_aspects(post, aspect_ids)
     if aspect_ids == :all || aspect_ids == "all"
       aspects = self.aspects
     elsif aspect_ids.is_a?(Array) && aspect_ids.first.class == Aspect
       aspects = aspect_ids
     else
-      aspects = self.aspects.find_all_by_id( aspect_ids )
+      aspects = self.aspects.find_all_by_id(aspect_ids)
     end
     #send to the aspects
     target_people = []
 
-    aspects.each{ |aspect|
+    aspects.each { |aspect|
       aspect.posts << post
       aspect.save
       target_people = target_people | aspect.people
@@ -189,15 +207,15 @@ class User
 
   def push_to_people(post, people)
     salmon = salmon(post)
-    people.each{|person|
+    people.each { |person|
       xml = salmon.xml_for person
-      push_to_person( person, xml)
+      push_to_person(person, xml)
     }
   end
 
-  def push_to_person( person, xml )
+  def push_to_person(person, xml)
     Rails.logger.debug("#{self.real_name} is adding xml to message queue to #{person.receive_url}")
-    QUEUE.add_post_request( person.receive_url, xml )
+    QUEUE.add_post_request(person.receive_url, xml)
     QUEUE.process
   end
 
@@ -206,7 +224,7 @@ class User
     QUEUE.add_hub_notification(APP_CONFIG[:pubsub_server], self.public_url)
   end
 
-  def salmon( post )
+  def salmon(post)
     created_salmon = Salmon::SalmonSlap.create(self, post.to_diaspora_xml)
     created_salmon
   end
@@ -221,7 +239,7 @@ class User
     comment
   end
 
-  def build_comment( text, options = {})
+  def build_comment(text, options = {})
     raise "must comment on something!" unless options[:on]
     comment = Comment.new(:person_id => self.person.id, :text => text, :post => options[:on])
     comment.creator_signature = comment.sign_with_key(encryption_key)
@@ -233,7 +251,7 @@ class User
     end
   end
 
-  def dispatch_comment( comment )
+  def dispatch_comment(comment)
     if owns? comment.post
       comment.post_creator_signature = comment.sign_with_key(encryption_key)
       comment.save
@@ -245,9 +263,9 @@ class User
   end
 
   ######### Posts and Such ###############
-  def retract( post )
-    aspect_ids = aspects_with_post( post.id )
-    aspect_ids.map!{|aspect| aspect.id.to_s}
+  def retract(post)
+    aspect_ids = aspects_with_post(post.id)
+    aspect_ids.map! { |aspect| aspect.id.to_s }
 
     post.unsocket_from_uid(self.id, :aspect_ids => aspect_ids) if post.respond_to? :unsocket_from_uid
     retraction = Retraction.for(post)
@@ -266,22 +284,35 @@ class User
   end
 
   ###Invitations############
-  def invite_user( opts = {} )
+  def invite_user(opts = {})
     if self.invites > 0
 
       aspect_id = opts.delete(:aspect_id)
       if aspect_id == nil
         raise "Must invite into aspect"
-      elsif !(self.aspects.find_by_id(aspect_id))
+      end
+      aspect_object = self.aspects.find_by_id(aspect_id)
+      if !(aspect_object)
         raise "Must invite to your aspect"
+      else
+        u = User.find_by_email(opts[:email])
+        if u.nil?  
+        elsif friends.include?(u.person)
+          raise "You are already friends with this person"          
+        elsif not u.invited?
+          self.send_friend_request_to(u.person, aspect_object)
+          return
+        elsif u.invited? && u.inviters.include?(self)
+          raise "You already invited this person"          
+        end
       end
       request = Request.instantiate(
-      :to => "http://local_request.example.com",
-      :from => self.person,
-      :into => aspect_id
+        :to => "http://local_request.example.com",
+        :from => self.person,
+        :into => aspect_id
       )
 
-      invited_user = User.invite!(:email => opts[:email], :request => request, :inviter => self)
+      invited_user = User.invite!(:email => opts[:email], :request => request, :inviter => self, :invite_message => opts[:invite_message])
 
       self.invites = self.invites - 1
       self.pending_requests << request
@@ -304,6 +335,10 @@ class User
     else
       invitable.pending_requests << request
       invitable.inviters << inviter
+      message = attributes.delete(:invite_message)
+      if message
+        invitable.invite_messages[inviter.id.to_s] = message
+      end
     end
 
     if invitable.new_record?
@@ -316,7 +351,7 @@ class User
     invitable
   end
 
-  def accept_invitation!( opts = {} )
+  def accept_invitation!(opts = {})
     if self.invited?
       self.username              = opts[:username]
       self.password              = opts[:password]
@@ -356,7 +391,7 @@ class User
   end
 
   ###Helpers############
-  def self.instantiate!( opts = {} )
+  def self.instantiate!(opts = {})
     opts[:person][:diaspora_handle] = "#{opts[:username]}@#{APP_CONFIG[:terse_pod_url]}"
     opts[:person][:url] = APP_CONFIG[:pod_url]
 
@@ -374,17 +409,13 @@ class User
     "#{self.username}@#{APP_CONFIG[:terse_pod_url]}"
   end
 
-  def downcase_username
-    username.downcase! if username
-  end
-
   def as_json(opts={})
     {
       :user => {
-        :posts            => self.raw_visible_posts.each{|post| post.as_json},
-        :friends          => self.friends.each {|friend| friend.as_json},
-        :aspects           => self.aspects.each  {|aspect|  aspect.as_json},
-        :pending_requests => self.pending_requests.each{|request| request.as_json},
+        :posts            => self.raw_visible_posts.each { |post| post.as_json },
+        :friends          => self.friends.each { |friend| friend.as_json },
+        :aspects           => self.aspects.each { |aspect| aspect.as_json },
+        :pending_requests => self.pending_requests.each { |request| request.as_json },
       }
     }
   end
@@ -395,9 +426,9 @@ class User
   end
 
   def encryption_key
-    OpenSSL::PKey::RSA.new( serialized_private_key )
+    OpenSSL::PKey::RSA.new(serialized_private_key)
   end
-  
+
   protected
 
   def remove_person
@@ -405,12 +436,16 @@ class User
   end
 
   def unfriend_everyone
-    friends.each{ |friend|
+    friends.each { |friend|
       if friend.owner?
         friend.owner.unfriended_by self.person
-      else 
-        self.unfriend friend 
+      else
+        self.unfriend friend
       end
     }
+  end
+  
+  def remove_all_aspects
+    aspects.destroy_all
   end
 end
