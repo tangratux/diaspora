@@ -20,6 +20,7 @@ class EMWebfinger
 
   def on_person(&block)
     @callbacks << block
+    self.fetch
   end
 
   private
@@ -39,7 +40,7 @@ class EMWebfinger
 
   def make_person_from_webfinger(webfinger_profile)
     unless webfinger_profile.strip == ""
-    
+      
       wf_profile = WebfingerProfile.new(@account, webfinger_profile)
       
       http = EventMachine::HttpRequest.new(wf_profile.hcard).get :timeout => TIMEOUT
