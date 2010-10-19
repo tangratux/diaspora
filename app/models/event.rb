@@ -11,9 +11,9 @@ class Event < Post
 
   key :title,      String
   key :summary,    String
-  key :start_date, Time
+  key :start_date, Date
   key :start_time, Time
-  key :end_date, Time
+  key :end_date, Date
   key :end_time, Time
 
   

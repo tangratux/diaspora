@@ -1,6 +1,13 @@
 -#   Copyright (c) 2010, Diaspora Inc.  This file is
 -#   licensed under the Affero General Public License version 3 or later.  See
 -#   the COPYRIGHT file.
+- content_for :head do
+  = javascript_include_tag 'jquery-ui-1.8.5.custom.min.js'
+  :javascript
+    $(document).ready(function(){
+      $('#event_start_date').datepicker({ 'dateFormat': "DD, d MM, yy" });
+      $('#event_end_date').datepicker({ 'dateFormat': "DD, d MM, yy" });
+    });
 
 .back= link_to "⇧ #{@event.title}", @event
 %h1.big_text
@@ -18,9 +25,9 @@
     %b event summary:
     = a.text_field :summary
     %b event date:
-    = "pending" #a.text_field :start_daae
+    = a.text_field :start_date
     %b event time
-    = "pending"
+    = a.time_select :start_time, { :default => Time.now.change(:hour => 21), :simple_time_select => true, :minute_interval => 30, :time_separator => "" }
 
   .submit_block
     = link_to t('.cancel'), root_path

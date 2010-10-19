@@ -15,6 +15,9 @@ class EventsController < ApplicationController
 
   def create
     aspect = params[:event][:to]
+    params[:event][:start_time] = params[:event][:"start_time(5i)"]
+    params[:event].delete(:"start_time(5i)")
+
 
     data = clean_hash(params[:event])
     @event = current_user.post(:event, data)
@@ -49,8 +52,10 @@ class EventsController < ApplicationController
 
   def update
     @event = current_user.find_visible_post_by_id params[:id]
+    params[:event][:start_time] = params[:event][:"start_time(5i)"]
+    params[:event].delete(:"start_time(5i)")
 
-    data = clean_hash(params[:album])
+    data = clean_hash(params[:event])
 
     if current_user.update_post( @event, data )
       flash[:notice] =  I18n.t 'events.update.success', :name  => @event.title

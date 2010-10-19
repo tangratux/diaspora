@@ -12,7 +12,8 @@
     = f.text_field :summary
     = f.hidden_field :to, :value => aspect
     = f.text_field :start_date
-    = f.text_field :start_time
+    = f.time_select :start_time, { :default => Time.now.change(:hour => 21), :simple_time_select => true, :minute_interval => 30, :time_separator => "" }
+    //text_field :start_time
     = f.text_field :end_date, {:style =>"display:none"}
-    = f.text_field :end_time, {:style =>"display:none"}
+    = f.time_select :end_time, { :default => Time.now.change(:hour => 21), :simple_time_select => true, :minute_interval => 30, :time_separator => "" , :style =>"display:none"}
   = f.submit t('.create'), :class => 'button'
