@@ -11,12 +11,14 @@ module Diaspora
 
       def receive xml, salmon_author
         object = Diaspora::Parser.from_xml(xml)
-        Rails.logger.debug("Receiving object for #{self.real_name}:\n#{object.inspect}")
-        Rails.logger.debug("From: #{object.person.inspect}") if object.person
-
+        puts object.inspect
         sender_in_xml = sender(object, xml)
 
-        if (salmon_author == sender_in_xml)
+        if (salmon_author != sender_in_xml)
+          raise "Malicious Post, #{salmon_author.real_name} with id #{salmon_author.id} is sending a #{object.class} as #{sender_in_xml.real_name} with id #{sender_in_xml.id} "
+        else 
+          Rails.logger.debug("Receiving object for #{self.real_name}:\n#{object.inspect}")
+          Rails.logger.debug("From: #{sender_in_xml.inspect}")
           if object.is_a? Retraction
             receive_retraction object, xml
           elsif object.is_a? Request
@@ -24,12 +26,12 @@ module Diaspora
           elsif object.is_a? Profile
             receive_profile object, xml
           elsif object.is_a?(Comment)
-            receive_comment object, xml
+            receive_comment(object, xml)
+          elsif object.is_a? MoveNotification
+            receive_move_notification(object, xml)
           else
-            receive_post object, xml
+            receive_post(object, xml)
           end
-        else
-          raise "Malicious Post, #{salmon_author.real_name} with id #{salmon_author.id} is sending a #{object.class} as #{sender_in_xml.real_name} with id #{sender_in_xml.id} "
         end
       end
 
@@ -42,18 +44,24 @@ module Diaspora
           sender = Diaspora::Parser.owner_id_from_xml xml
         elsif object.is_a?(Comment)
           sender = (owns?(object.post))? object.person : object.post.person
+        elsif object.is_a? MoveNotification
+          sender = Person.by_webfinger(object.old_handle) #should be a local person
         else
           sender = object.person
         end
         sender
       end
 
-      def receive_retraction retraction, xml
+      def receive_move_notification object, xml
+        object.perform
+      end
+
+      def receive_retraction(retraction, xml)
         if retraction.type == 'Person'
           Rails.logger.info( "the person id is #{retraction.post_id} the friend found is #{visible_person_by_id(retraction.post_id).inspect}")
           unfriended_by visible_person_by_id(retraction.post_id)
         else
-          retraction.perform self.id
+          retraction.perform(self.id)
           aspects = self.aspects_with_person(retraction.person)
           aspects.each{ |aspect| aspect.post_ids.delete(retraction.post_id.to_id)
             aspect.save
