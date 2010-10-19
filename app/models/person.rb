@@ -85,7 +85,8 @@ class Person
 
   #database calls
   def self.by_account_identifier(identifier)
-    self.first(:diaspora_handle => identifier.gsub('acct:', '').to_s.downcase)
+    identifier = identifier.strip.downcase.gsub('acct:', '') if identifier
+    self.first(:diaspora_handle => identifier)
   end
 
   def self.local_by_account_identifier(identifier)

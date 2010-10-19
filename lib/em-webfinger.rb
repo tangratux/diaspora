@@ -9,11 +9,12 @@ class EMWebfinger
   end
   
   def fetch
-     person = Person.by_account_identifier(@account)
+     raise 'you need to set a callback before calling fetch' if @callbacks.empty?
+      person = Person.by_account_identifier(@account)
       if person
         process_callbacks person
       else
-        xrd
+        get_xrd
       end
   end
 
@@ -23,7 +24,7 @@ class EMWebfinger
 
   private
 
-  def xrd
+  def get_xrd
     http = EventMachine::HttpRequest.new(xrd_url).get :timeout => TIMEOUT
     http.callback { get_webfinger_profile(webfinger_profile_url(http.response)) }
     http.errback { process_callbacks "there was an error getting the xrd at #{xrd_url}" }
@@ -47,7 +48,7 @@ class EMWebfinger
         p = Person.build_from_webfinger(wf_profile, hcard)
         process_callbacks(p)
       }
-      http.errback{ process_callbacks "there was a problem fetching the hcard for #{@account}"}
+      http.errback{process_callbacks "there was a problem fetching the hcard for #{@account}"}
     end
   end
 
@@ -58,10 +59,10 @@ class EMWebfinger
 
 
   ##helpers
-  #
+  private
   def webfinger_profile_url(xrd_response)
     doc = Nokogiri::XML::Document.parse(xrd_response)  
-    swizzle @account, doc.at('Link[rel=lrdd]').attribute('template').value
+    swizzle doc.at('Link[rel=lrdd]').attribute('template').value
   end
 
   def xrd_url(ssl = false)
@@ -69,8 +70,8 @@ class EMWebfinger
     "http#{'s' if ssl}://#{domain}/.well-known/host-meta"
   end
   
-  def swizzle(account, template)
-    template.gsub '{uri}', account
+  def swizzle(template)
+    template.gsub '{uri}', @account
   end
 
 end

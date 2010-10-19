@@ -180,6 +180,11 @@ describe Person do
         p = Person.by_account_identifier(person.diaspora_handle)
         p.should == person
       end
+
+      it 'should downcase and strip the diaspora_handle' do
+        dh_upper = "    " + user.diaspora_handle.upcase + "   "
+        Person.by_account_identifier(dh_upper).should == user.person
+      end
     end
 
     describe '#local_by_account_identifier' do
