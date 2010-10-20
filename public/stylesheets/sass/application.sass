@@ -988,7 +988,7 @@ ul#settings_nav
     :color transparent
 
 
-#friend_pictures
+.friend_pictures
   :margin
     :top 12px
   :line-height 1em
@@ -996,6 +996,15 @@ ul#settings_nav
     :margin-right -1px
     :width 30px
     :height 30px
+
+.friend_pictures.horizontal
+  :display inline
+  :margin
+    :left 20px
+
+  img
+    :width 18px
+    :height 18px
 
 #thumbnails
   :line-height 14px
@@ -1126,12 +1135,43 @@ header
     .controls
       :display inline
 
-#slider ul, #slider li
+ul#getting_started
   :margin 0
   :padding 0
   :list-style none
 
-#slider, #slider li
-  :width 1000px
-  :overflow hidden
+  > li
+    :margin
+      :bottom 100px
+
+#getting_started_button
+  :position fixed
+  :bottom 4px 
+  :margin 
+    :left 680px
+
+  a
+    :padding 10px
+    :background #333
+    :color #eee
+
+    :-webkit-border-radius 5px 5px 0 0
+    :-moz-border-radius 5px 5px 0 0
+    :border-radius 5px 5px 0 0
+
+    :-webkit-box-shadow 0 0 2px #666
+
+ul.aspects
+  :margin 0
+  :padding 0
+  :list-style none
+  :width 67%
+  :color #999
+  :font
+    :size 24px
+
+  > li
+    :padding 12px 0
+    :border
+      :bottom 1px solid #eee
 

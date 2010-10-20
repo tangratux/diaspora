@@ -67,7 +67,7 @@ $(document).ready(function(){
     };
   });
   
-  $("#slider").easySlider({speed:400, numeric:true});
+  //$("#slider").easySlider({speed:400});
   
 
 });//end document ready
