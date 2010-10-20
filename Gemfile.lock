@@ -153,6 +153,7 @@ GEM
       rails (>= 3.0.0.beta4)
     ffi (0.6.3)
       rake (>= 0.8.7)
+    fixture_builder (0.2.0)
     gherkin (2.2.9)
       json (~> 1.4.6)
       term-ansicolor (~> 1.0.5)
@@ -274,6 +275,7 @@ DEPENDENCIES
   em-http-request!
   em-websocket
   factory_girl_rails
+  fixture_builder
   haml
   json
   magent!

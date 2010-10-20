@@ -47,6 +47,7 @@ group :test, :development do
 end
 
 group :test do
+  gem 'fixture_builder'
   gem 'capybara', '~> 0.3.9'
   gem 'cucumber-rails', '0.3.2'
   gem 'rspec', '>= 2.0.0'

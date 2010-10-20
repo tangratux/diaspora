@@ -5,13 +5,6 @@
 require 'spec_helper'
 
 describe User do
-  let(:user) { Factory(:user) }
-  let(:aspect) { user.aspect(:name => 'heroes') }
-  let(:user2) { Factory(:user) }
-  let(:aspect2) { user2.aspect(:name => 'stuff') }
-  let(:user3) { Factory(:user) }
-  let(:aspect3) { user3.aspect(:name => 'stuff') }
-
   describe "validation" do
     describe "of associated person" do
       it "fails if person is not valid" do

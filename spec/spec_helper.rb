@@ -7,6 +7,7 @@
 
 ENV["RAILS_ENV"] ||= 'test'
 require File.dirname(__FILE__) + "/../config/environment" unless defined?(Rails)
+require File.dirname(__FILE__) + "/support/fixture_builder"
 require 'rspec/rails'
 require 'database_cleaner'
 require 'webmock/rspec'
