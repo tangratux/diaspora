@@ -81,6 +81,11 @@ class UsersController < ApplicationController
   def invite
     User.invite!(:email => params[:email])
   end
+
+  def contacts
+    @contacts = current_user.friends
+    render 'users/contacts'
+  end
   
   
   def import

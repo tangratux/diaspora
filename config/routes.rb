@@ -18,6 +18,7 @@ Diaspora::Application.routes.draw do
   match 'users/export',            :to => 'users#export'
   match 'users/import',            :to => 'users#import'
   match 'users/export_photos',     :to => 'users#export_photos'
+  match 'contacts',                :to => 'users#contacts'
   resources :users,         :except => [:create, :new, :show]
 
   match 'aspects/move_friend',  :to => 'aspects#move_friend', :as => 'move_friend'

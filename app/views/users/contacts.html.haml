@@ -1,0 +1,40 @@
+-#   Copyright (c) 2010, Diaspora Inc.  This file is
+-#   licensed under the Affero General Public License version 3 or later.  See
+-#   the COPYRIGHT file.
+
+
+:javascript
+
+  $("input").live('keyup', function(e){
+    var search = $(this);
+    var list   = $(this).parent(".window").children(".info_list");
+    var query  = new RegExp(search.val(),'i');
+
+    $("li", list).each( function() {
+      var element = $(this);
+      if( !element.text().match(query) ){
+        element.slideUp(70);
+      } else {
+        element.slideDown(70);
+      }
+    });
+  });
+  
+
+#section_header
+  %h2
+    Contacts 
+
+.window
+  = text_field_tag :contact_search, nil, :placeholder => "Search people", :type => 'search', :results => 5
+
+  %ul.info_list
+    %li One
+    %li Two
+    %li Three
+    %li Four
+    %li Five
+    %li Six
+    %li Seven Eight
+    %li Seven
+    %li Eight

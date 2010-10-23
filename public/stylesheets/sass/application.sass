@@ -124,6 +124,11 @@ header
     :border none
     :color #fff
 
+  .people_link
+    :position absolute
+    :left 520px
+    :top 3px
+
   ul#user_menu
     :overflow hidden
     :white-space nowrap
@@ -1240,3 +1245,54 @@ ul#breadcrumb
     &:last-child
       &:after
         :content ''
+
+.window
+  :width 200px
+  :-webkit-box-shadow 1px 2px 4px #333
+  :border 5px solid #333
+  :border-radius 5px
+  :background
+    :color #999
+
+  input
+    :width 100%
+
+ul.info_list
+  :margin 0
+  :padding 0
+  :list
+    :style none
+
+  :font
+    :size 14px
+    :weight bold
+
+  :background
+    :color rgb(250,250,250)
+
+  :color #444
+  :text
+    :shadow 0 1px #fff
+
+  :max-height 500px
+  :overflow auto
+
+  > li
+    :border
+      :bottom 1px solid #ccc
+      :top 1px solid #fff
+
+    .avatar
+      :height 20px
+      :width 20px
+      :margin
+        :right 5px
+
+    a
+      :padding 5px
+      :display block
+      :height 100%
+
+      &:hover
+        :background
+          :color rgb(230,230,230)

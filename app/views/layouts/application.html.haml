@@ -44,6 +44,9 @@
           %span.sub_text
             PREVIEW
 
+        .people_link
+          = link_to "Contacts", contacts_path 
+
         #global_search
           = form_tag(people_path, :method => 'get') do
             = text_field_tag 'q', nil, :placeholder => "Search", :type => 'search', :results => 5
