@@ -15,7 +15,11 @@
       - @fb_friends[:data].each do |friend|
         = image_tag( "http://graph.facebook.com/#{friend[:id]}/picture" )
     -unless (@aspect == :all)
-      = link_to (image_tag('add_friend_button.png', :height => "50px", :width => "50px")), "#add_request_pane", :id => 'add_request_button'
+
+      .add_friend_pane
+        = link_to (image_tag('add_friend_button.png'), '#')
+        .window{:style => "display:none;"}
+          = render 'shared/contact_list', :contacts => @all_friends
 
       .fancybox_content
         #add_request_pane
@@ -27,10 +31,11 @@
 
   %br
   %br
-  %ul
+  %ul.left_nav
     %li= link_to 'stream', aspect_or_all_path(@aspect)
     %li= link_to t('.photos'), albums_path(:aspect => @aspect)
 
   %br
 
   = render "shared/invitations", :invites => @invites
+

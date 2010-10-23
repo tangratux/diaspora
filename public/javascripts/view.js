@@ -136,3 +136,25 @@ $(".comment_box").live('blur', function(evt){
     $this.attr("rows", 1);
   }
 });
+
+
+$(".add_friend_pane").live("click", function() {
+  $(this).children(".window").fadeIn(200);
+});
+
+$("li", ".info_list").live("click", function() {
+
+  var aspect_id = $(this).parent(".info_list").attr("data-aspect_id"); 
+  var person_id = $(this).attr("data-guid"); 
+
+  $.ajax({
+    type: "POST",
+    url: "/aspects/add_to_aspect",
+    data:{
+          'friend_id' : person_id,
+          'aspect_id' : aspect_id }
+  });
+
+  $(this).closest(".window").fadeOut(200);
+
+});

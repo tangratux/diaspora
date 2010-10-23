@@ -3,16 +3,11 @@
 -#   the COPYRIGHT file.
 
 
-  
-#section_header
-  %h2
-    Contacts 
-
 - content_for :head do
   :javascript
     $("input").live('keyup', function(e){
       var search = $(this);
-      var list   = $(this).parent(".window").children(".info_list");
+      var list   = $(this).parent().children(".info_list");
       var query  = new RegExp(search.val(),'i');
 
       $("li", list).each( function() {
@@ -26,7 +21,8 @@
     });
 
 = text_field_tag :contact_search, nil, :placeholder => "Search people", :type => 'search', :results => 5
-%ul.info_list
-  - for contact in @contacts
-    %li= link_to contact.real_name, person_path(contact)
+%ul.info_list{ :data=>{:aspect_id => @aspect.id}}
+  - for contact in contacts
+    %li{:data=>{:guid=>contact.id}}
+      = link_to contact.real_name, '#'
   

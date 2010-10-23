@@ -1107,12 +1107,12 @@ ul#settings_nav
   :padding 0
 
 #left_pane
-  ul
+  ul.left_nav
     :margin 0
     :padding 0
     :list
       :style none
-    li a
+    > li a
       :display block
       :padding 3px
       :border
@@ -1246,18 +1246,27 @@ ul#breadcrumb
       &:after
         :content ''
 
+.add_friend_pane
+  :position relative
+  :display inline
+
 .window
   :width 200px
-  :-webkit-box-shadow 1px 2px 4px #333
+  :-webkit-box-shadow 1px 2px 6px #333
   :border 5px solid #333
   :border-radius 5px
   :background
     :color #999
+  :position absolute
+  :z-index 100
 
   input
     :width 100%
 
+
 ul.info_list
+
+
   :margin 0
   :padding 0
   :list
@@ -1275,6 +1284,7 @@ ul.info_list
     :shadow 0 1px #fff
 
   :max-height 500px
+  :min-height 200px
   :overflow auto
 
   > li

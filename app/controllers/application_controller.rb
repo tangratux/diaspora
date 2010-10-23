@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
 
       @aspects = current_user.aspects
       @aspects_dropdown_array = current_user.aspects.collect{|x| [x.to_s, x.id]}
-      @friends = current_user.friends
+      @all_friends = current_user.friends
     end
   end
 
