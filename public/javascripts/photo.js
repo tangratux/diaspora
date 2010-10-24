@@ -4,7 +4,7 @@
 */
 
 
-$(document).keydown(function(e){
+$(document).keyup(function(e){
   switch(e.keyCode) {
     case 37:
       if(!$("textarea").hasClass("hasfocus")){//prevent redirect if textarea has focus
