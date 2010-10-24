@@ -7,7 +7,7 @@ Diaspora::Application.routes.draw do
   resources :status_messages, :only   => [:create, :destroy, :show]
   resources :comments,        :except => [:index]
   resources :requests,        :except => [:edit, :update]
-  resources :photos,          :except => [:index]
+  resources :photos
   resources :albums
 
   devise_for :users, :controllers => {:registrations => "registrations",
@@ -18,7 +18,7 @@ Diaspora::Application.routes.draw do
   match 'users/export',            :to => 'users#export'
   match 'users/import',            :to => 'users#import'
   match 'users/export_photos',     :to => 'users#export_photos'
-  resources :users,         :except => [:create, :new, :show]
+  resources :users,                :except => [:create, :new, :show]
 
   match 'aspects/move_friend',  :to => 'aspects#move_friend', :as => 'move_friend'
   match 'aspects/add_to_aspect',:to => 'aspects#add_to_aspect', :as => 'add_to_aspect'

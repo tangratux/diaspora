@@ -83,4 +83,11 @@ module ApplicationHelper
     response_hash = MiniFB.get(token, 'me')
     "Connected to facebook as #{response_hash[:name]}"
   end
+
+  def person_photos_path person
+    person_id = person.id if person.respond_to?(:id)
+    person_id ||= person
+      
+    "#{photos_path}?person_id=#{person_id}"
+  end
 end
