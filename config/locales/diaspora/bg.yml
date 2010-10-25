@@ -238,7 +238,10 @@ bg:
           already_friends: "Вече си приятел с %{destination_url}!"
           success: "Покана за приятелство е изпратена на %{destination_url}."
           horribly_wrong: "Нещо много лошо се случи. Много лошо."
-		  # Bulgarian localization for Ruby on Rails 2.2+
+
+		  
+		  
+# Bulgarian localization for Ruby on Rails 2.2+
 # by Samson Behar <master.webmaster.master@gmail.com>
 # Fixes by Yavor Ivanov, http://github.com/YavorIvanov
 #
