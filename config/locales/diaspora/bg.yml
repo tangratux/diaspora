@@ -1,0 +1,240 @@
+#   Copyright (c) 2010, Diaspora Inc.  This file is
+#   licensed under the Affero General Public License version 3 or later.  See
+#   the COPYRIGHT file.
+
+# Localization file for Bulgarian (Formal Honorifics). Add more files in this directory for other locales.
+# See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+bg:
+  activemodel:
+      errors:
+          models:
+              user:
+                  attributes:
+                      username:
+                          taken: "това име е заето"
+                      email:
+                          taken: "този имейл е зает"
+  hello: "Здравейте на всички"
+  application:
+      helper:
+          unknown_person: "непозната личност"
+          new_requests: "ново търсене"
+  dashboards:
+      helper:
+          home: "начало"
+  error_messages:
+      helper:
+          invalid_fields: "невалидни данни"
+          correct_the_following_errors_and_try_again: "Поправете следните грешки и опитайте пак."
+  people:
+      helper:
+           results_for: " резултати за %{params}"
+           people_on_pod_are_aware_of: " човека на стъблото са оведомени "
+  layouts:
+      application:
+          edit_profile: "промени профила"
+          logout: "излизане"
+  shared:
+      aspect_nav:
+          all_aspects: "Всички аспекти"
+          manage: "Организирай"
+          manage_your_aspects: "Организирай твоите аспекти"
+      sub_header:
+          all_aspects: "Всички аспекти"
+          manage_aspects: "Организирай аспектите"
+      publisher:
+          share: "Сподели"
+      aspect_friends:
+          add_friends: "добави приятели"
+          photos: "снимки"
+  albums:
+      album:
+          you: "Теб"
+      new_album:
+          create: "създай"
+          add_a_new_album: "Добави нов албум"
+      show:
+          edit_album: "Редактирай албум"
+          albums: "албуми"
+          updated: "Актуализиран"
+          by: "от"
+      edit:
+          editing: "Редактиране"
+          updated: "редактиран"
+          are_you_sure: "Чакай! Наистина? "
+          delete_album: "Изтрий албума"
+          cancel: "Анулирай"
+      index:
+          home: "начало"
+          new_album: "Нов албум"
+      create:
+          success: "Албумът с име %{name} е създаден."
+      update:
+          success: "Албумът %{name} беше редактиран успешно."
+          failure: "Редактирането на албума %{name} е неуспешно."
+      destroy:
+          success: "Албумът %{name} е изтрит."
+      helper:
+          friends_albums: "Албуми на приятели"
+          your_albums: "Твоите албуми"
+  aspects:
+      index:
+          photos: "снимки"
+      show:
+          photos: "снимки"
+      
+      no_friends_message:
+          nobody: "Ние знаем, че имаш приятели, доведи ги тук!"
+          nobody_in_aspect: "Аспектът '%{aspect_name}' е празен."
+          add_friend: "Добави приятел"
+          add_friend_to: "Добави някой в %{aspect_name}"
+          invite: "Покани някой тук!"
+      no_posts_message:
+          start_talking:  "Всеки мълчи. Започки разговора!"
+      manage:
+          add_a_new_aspect: "Добави нов аспект"
+          add_a_new_friend:  "Добави нов приятел"
+          show: "Покажи"
+          update_aspects: "Актуализирай аспектите"
+          requests: "Заявки"
+          ignore_remove: "Игнорирай / Изтрий"
+      new_aspect:
+          add_a_new_aspect: "Добави нов аспект"
+          create: "Създай"
+      create:
+          success: "Клик върху знака плюс в лявата страна, за да определиш, кой ще има достъп до аспекта ти."
+          failure: "Създаването на аспекта е неуспешно."
+      destroy:
+          success: "%{name} е изтрит."
+      update:
+          success: "Аспектът %{name}, беше редактиран успешно."
+      move_friends:
+          failure: "Редактирането на аспекта спрямо  %{real_name} е неуспешно."
+          success: "Аспектите са редактирани успешно."
+      move_friend:
+          failure: "не проработи %{inspect}"
+          success: "Приместен в нов аспект."
+      helper:
+          remove: "премахни"
+          aspect_not_empty: "Аспектът не е празен"
+  users:
+      edit:
+          editing_profile: "Редактирай профила"
+      profile:
+          cancel: "Анулирай"
+          update_profile: "Обнови профила"
+          home: "Начало"
+          diaspora_username: "ПОТРЕБИТЕЛСКО ИМЕ ЗА ДИАСПОРА"
+          info: "Информации"
+          picture: "Снимка"
+          editing_profile: "Редактиране на профила"
+          albums: "Албуми"
+          you_dont_have_any_photos: "Нито една снимка !  Отиди на страница"
+          page_to_upload_some:  "за да качиш някоя."
+          or: "или"
+      destroy: "Регистрацията е унищожена успешно."
+  comments:
+      comment:
+          ago: "преди"
+      new_comment:
+          comment: "Коментар"
+  photos:
+      show:
+          prev: "предишен"
+          full_size: "пълен размер"
+          next: "следващ"
+          edit_photo: "Редактирай снимката"
+          delete_photo: "Изтрий снимката"
+          are_you_sure: "Чакай! Наистина?"
+          comments: "коментари"
+      edit:
+          editing: "Редактиране"
+          are_you_sure: "Чакай! Наистина?"
+          delete_photo: "Изтрий снимката"
+      photo:
+          show_comments: "покажи коментарите"
+          posted_a_new_photo_to: "публикува нова снимка в"
+          delete: "Изтрий"
+          are_you_sure: "Чакай! Наистина?"
+      new:
+          new_photo: "Нова снимка"
+          back_to_list: "Назад към списъка"
+          post_it: "публикувай!"
+      create:
+          runtime_error: "Трансферът на снимката пропадна. Коланът ти добре ли е закопчан?"
+          integrity_error: "Трансферът на снимката пропадна.  Това наистина ли е снимка?"
+          type_error: "Трансферът на снимката пропадна. Наистина ли добави снимка?"
+      update:
+          notice: "Снимкате е обновена успешно."
+          error:  "Редактирането на снимката е неуспешно."
+      destroy:
+          notice: "Снимката е изтрита."
+  registrations:
+      new:
+          sign_up: "Записване"
+      create:
+          success: "Вие се записахте в Диаспора !"
+  invitations:
+      create:
+          sent: 'Поканата е изпратена.'
+          no_more: 'Поканите свършиха.'
+          already_sent: 'Този човек вече е поканен.'
+          already_friends: 'Вече сте приятели' 
+          invitation_token_invalid: 'Кодът за покана е невалиден!'
+          updated: 'Паролата е запаметена успешно. Сесията е отворена успешно.'
+
+  status_messages:
+      new_status_message:
+          tell_me_something_good: "Кажи нещо хубаво"
+          oh_yeah: "оо даа !"
+      status_message:
+          show_comments: "покажи коментарите"
+          delete: "Изтрий"
+          are_you_sure: "Наистина ли?"
+      show:
+          status_message: "Статус"
+          comments: "коментари"
+          are_you_sure: "Наистина ли?"
+          destroy: "Унищожи"
+          view_all: "Покажи всичко"
+          message: "Съобщение"
+          owner: "Собственик"
+      helper:
+          no_message_to_display: "Няма съобщения за показване."
+  people:
+      person:
+          add_friend: "добави приятел"
+          pending_request: "изчакване на отговор"
+      index:
+          add_friend: "добави приятел"
+          real_name: "истинско име"
+          diaspora_handle: "регистриран в Диаспора"
+          thats_you: "това си ти!"
+          friend_request_pending: "Приятели, чакащи за потвърждение "
+          you_have_a_friend_request_from_this_person: "Ето кой иска да сте приятели"
+      new:
+          new_person: "Нова личност"
+          back_to_list: "Назад към списъка"
+      show:
+          last_seen: "последно регистриране : %{how_long_ago}"
+          friends_since: "приятели от : %{how_long_ago}"
+          save: "запамети"
+          are_you_sure: "Наистина?"
+          remove_friend: "не ми е вече приятел"
+          no_posts: "нищо ново за показване!"
+  requests:
+      new_request:
+          add_a_new_friend_to: "Добави нов приятел към"
+          enter_a_diaspora_username: "Въведете Диаспора потребителско име :"
+          your_diaspora_username_is: "Твоето поребителско име в Диаспора е : %{diaspora_handle}"
+          friends_username: "Потребителското име на приятел"
+      destroy:
+          success: "Вече сте приятели."
+          error: "Изберете аспект !"
+          ignore: "Игнорирай покана."
+      create:
+          error: "Няма намерени резултати за този имейл !"
+          already_friends: "Вече си приятел с %{destination_url}!"
+          success: "Покана за приятелство е изпратена на %{destination_url}."
+          horribly_wrong: "Нещо много лошо се случи. Много лошо."
